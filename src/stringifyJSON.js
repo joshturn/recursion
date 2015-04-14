@@ -16,7 +16,13 @@ var stringifyJSON = function(obj) {
     return "" + obj + "";
   }
 
-
+if (Object.prototype.toString().call(obj) === true) {
+    var result = {};
+    for (var key in obj) {
+      result[(stringifyJSON(key))] == stringifyJSON(obj[key]);
+    }
+    return "" + result + "";
+  }
 
 if (Array.isArray(obj) === true) {
     var result = [];
