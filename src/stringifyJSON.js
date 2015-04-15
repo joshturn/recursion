@@ -4,34 +4,40 @@
 // but you don't so you're going to write it from scratch:
 
 var stringifyJSON = function(obj) {
-  if ((obj === null) || (obj === undefined)) {
-    return "" + obj + "";
+  if (obj === null) {
+    return "" + null + "";
   }
 
   if (typeof(obj) === "string") {
     return '"' + obj + '"';
   }
 
-  if (typeof(obj) === "number" || "boolean") {
+  if (typeof(obj) === "number") {
     return "" + obj + "";
   }
 
-if (Object.prototype.toString().call(obj) === true) {
-    var result = {};
-    for (var key in obj) {
-      result[(stringifyJSON(key))] == stringifyJSON(obj[key]);
-    }
-    return "" + result + "";
+  if (typeof(obj) === "boolean") {
+    return "" + obj + "";
   }
 
-if (Array.isArray(obj) === true) {
-    var result = [];
+  if (Array.isArray(obj) === true) {
+    var arrResult = [];
     for (var i = 0; i < obj.length; i++) {
-      result.push(stringifyJSON(obj[i]));
+      arrResult.push(stringifyJSON(obj[i]));
     }
-    return "" + result + "";
+    return '[' + arrResult + ']';
   }
 
+  if (typeof(obj) === "object") {
+    var objResult = [];
+    for (var key in obj) {
+      if (obj[key] === undefined || typeof(obj) === "function") {
+        return '{}';
+      }
+      var temp = (stringifyJSON(key) + ":" + stringifyJSON(obj[key]));
+      objResult.push(temp);
+    }
+    return '{' + objResult + '}';
+  }
   return "" + obj + "";
-
-}
+};
